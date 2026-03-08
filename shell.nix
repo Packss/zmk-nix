@@ -35,8 +35,8 @@ let config = import ./config.nix { inherit pkgs; };
 		case "$1" in
 		"west")
 			flash() {
-				[[ -e /dev/ttyACM0 ]] || {
-					echo "/dev/ttyACM0 not found. Make sure to put your device in DFU mode."
+				[[ -e /dev/ttyACM1 ]] || {
+					echo "/dev/ttyACM1 not found. Make sure to put your device in DFU mode."
 					exit 1
 				}
 	
