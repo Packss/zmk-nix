@@ -11,17 +11,14 @@ let
   lib = pkgs.lib;
   root = builtins.toString ./.; # absolute path within system
 
-  keymaps = pkgs.writeScript "keymaps.sh" (
-    lib.mapAttrsToList (dst: src: "cp ${src} ./zmk/app/boards/${dst}/") (config.keymaps)
-  );
-
   build-zmk = pkgs.writeShellScriptBin "build-zmk" ''
     		set -e
+        rm -f $(find ${root} -name CMakeCache.txt)
     		cd ${root}/zmk/app
 
     		shields=(${lib.concatStringsSep " " config.build.shields})
     		for shield in ''${shields[@]}; {
-    			west build -d build/$shield -b ${config.build.board} -- -DSHIELD=$shield
+    			west build -p -d build/$shield -b ${config.build.board} -- -DSHIELD=$shield -DZMK_CONFIG=${config.build.config}
     		}
 
     		echo "Outputs:"
@@ -122,7 +119,6 @@ let
 
     		trap cleanup EXIT
 
-    		. ${keymaps}
     		. ~/.bashrc
     	'';
 
@@ -135,6 +131,8 @@ pkgs.mkShell {
     python3Packages.virtualenv
     python3Packages.west
     python3Packages.pyelftools
+    python3Packages.setuptools
+    python3Packages.protobuf
 
     clang-tools
     coreutils
