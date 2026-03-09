@@ -44,13 +44,12 @@ let
     			device_name=NICENANO
     			[[ -e /dev/disk/by-label/NICENANO ]] || {
     				echo "The nice!nano is not yet plugged in."
-    				exit 1
     			}
 
-    			device_path=$(cd /dev/disk/by-label; realpath $(readlink $device_name))
-    			regex_match="^''${device_path//\//\\/} on \(.*\) type .*"
-
     			flash() {
+    			  device_path=$(cd /dev/disk/by-label; realpath $(readlink $device_name))
+    			  regex_match="^''${device_path//\//\\/} on \(.*\) type .*"
+
     				mount | grep "$regex_match" &> /dev/null || {
     					udisksctl mount -b $device_path
     				}
@@ -84,6 +83,7 @@ let
     				continue
     				;;
     			"")
+            sleep 5
     				flash "$build"
     				;;
     			*)
@@ -133,6 +133,7 @@ pkgs.mkShell {
     python3Packages.pyelftools
     python3Packages.setuptools
     python3Packages.protobuf
+    python3Packages.psutil
 
     clang-tools
     coreutils
