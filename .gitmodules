@@ -1,0 +1,4 @@
+[submodule "zmk"]
+	path = zmk
+	url = ./zmk
+	branch = v0.3-branch
