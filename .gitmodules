@@ -1,4 +1,4 @@
 [submodule "zmk"]
 	path = zmk
-	url = ./zmk
+	url = git@github.com:zmkfirmware/zmk.git
 	branch = v0.3-branch
